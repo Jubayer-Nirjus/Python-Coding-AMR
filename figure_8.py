@@ -270,4 +270,4 @@ for c in range(3):
 output_file = 'Figure8_Farm_Typology_Cluster_Analysis.png'
 plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white')
 print(f"\n✓ Figure saved as: {output_file}")
-print("="*70)
+print("="*70) 
