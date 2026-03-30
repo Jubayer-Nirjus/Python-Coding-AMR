@@ -124,9 +124,9 @@ ax_bar.set_yticks(range(0, 101, 20))
 ax_bar.tick_params(axis='y', labelsize=9.5)
 ax_bar.axhline(y=0, color=COLORS['gray_dark'], linewidth=0.8)
 ax_bar.legend(
-    loc='upper center', fontsize=8.5, framealpha=0.95,
+    loc='upper center', fontsize=6.5, framealpha=0.25,
     edgecolor=COLORS['gray_light'],
-    title='WHO AWaRe category', title_fontsize=8.5,
+    title='WHO AWaRe category', title_fontsize=7.5,
 )
 
 # ── RIGHT PANEL — definitions ──

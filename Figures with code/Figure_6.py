@@ -137,7 +137,7 @@ ax1.plot([0, 1], [0, 1], '--', color=COLORS['diag'], lw=1.2, alpha=0.7,
 
 for name, res, col, ls in [
     ('LR', res_lr, COLORS['lr'], '-'),
-    ('RF ★', res_rf, COLORS['rf'], '-'),
+    ('RF', res_rf, COLORS['rf'], '-'),
     ('GB',  res_gb, COLORS['gb'], '--'),
 ]:
     ax1.plot(res['fpr'], res['tpr'], color=col, lw=2.2, linestyle=ls, alpha=0.92,
@@ -145,8 +145,8 @@ for name, res, col, ls in [
 
 # Pre-specified threshold
 ax1.axhline(y=0.75, color=COLORS['gray_dark'], lw=0.6, ls=':', alpha=0.4)
-ax1.text(0.60, 0.76, 'AUC-ROC = 0.75 threshold (not achieved)',
-         fontsize=7.5, color=COLORS['vermillion'], alpha=0.9)
+ax1.text(0.98, 0.73, 'AUC-ROC = 0.75 threshold\n(not achieved)',
+         fontsize=7.5, color=COLORS['vermillion'], alpha=0.9, va='top', ha='right')
 
 ax1.set_xlabel('1 − Specificity (false positive rate)', fontsize=10.5)
 ax1.set_ylabel('Sensitivity (true positive rate)', fontsize=10.5)
@@ -161,7 +161,7 @@ ax1.legend(loc='lower right', fontsize=8.5, framealpha=0.95, edgecolor='#BDD7EE'
 # Warning badge
 ax1.text(
     0.02, 0.98,
-    f'⚠ All models below AUC-ROC ≥ 0.75\n'
+    f'All models below AUC-ROC ≥ 0.75\n'
     f'Best: RF AUC-ROC = {res_rf["auc_roc"]:.3f}\n'
     f'RF AUC-PR = {res_rf["auc_pr"]:.3f} ({res_rf["auc_pr"]/baseline_auc_pr:.1f}× baseline)\n'
     f'EPV = {int(y.sum())}/10 = {y.sum()/10:.1f}  (recommended: ≥10)\n'
@@ -176,7 +176,7 @@ perf_text = (
     f"{'Model':<20}{'AUC-ROC':>8}{'AUC-PR':>8}{'MCC':>7}{'Brier':>7}\n"
     f"{'─'*50}\n"
     f"{'LR':<20}{res_lr['auc_roc']:>8.3f}{res_lr['auc_pr']:>8.3f}{res_lr['mcc']:>7.3f}{res_lr['brier']:>7.3f}\n"
-    f"{'RF ★':<20}{res_rf['auc_roc']:>8.3f}{res_rf['auc_pr']:>8.3f}{res_rf['mcc']:>7.3f}{res_rf['brier']:>7.3f}\n"
+    f"{'RF':<20}{res_rf['auc_roc']:>8.3f}{res_rf['auc_pr']:>8.3f}{res_rf['mcc']:>7.3f}{res_rf['brier']:>7.3f}\n"
     f"{'GB':<20}{res_gb['auc_roc']:>8.3f}{res_gb['auc_pr']:>8.3f}{res_gb['mcc']:>7.3f}{res_gb['brier']:>7.3f}\n"
     f"{'Baseline':<20}{'—':>8}{baseline_auc_pr:>8.3f}"
 )
@@ -204,7 +204,7 @@ ax2.set_yticks(y_pos); ax2.set_yticklabels(names, fontsize=10)
 ax2.set_xlabel('Feature importance (mean decrease impurity)', fontsize=10.5)
 ax2.set_xlim(0, 0.38)
 ax2.axvline(x=0, color=COLORS['gray_dark'], lw=0.8)
-ax2.set_title('B. RF Feature Importance\n(⚠ EPV = 2.7; rankings indicative only)',
+ax2.set_title('B. RF Feature Importance\n(EPV = 2.7; rankings indicative only)',
               fontsize=10.5, fontweight='bold', color=COLORS['gray_dark'], loc='left', pad=8)
 
 legend_els = [

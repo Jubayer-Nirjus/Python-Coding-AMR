@@ -66,7 +66,8 @@ plt.rcParams.update({
 df = pd.read_excel(EXCEL_FILE, sheet_name='1_Master_Data', header=1)
 df = df.dropna(subset=['Unique_ID'])
 for col in df.columns:
-    df[col] = pd.to_numeric(df[col], errors='coerce')
+    if col != 'AMR_Risk_Cat':
+        df[col] = pd.to_numeric(df[col], errors='coerce')
 
 N  = len(df)
 AM = df[df['AM_use_binary'] == 0].copy()

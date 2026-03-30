@@ -83,7 +83,7 @@ bw = 0.52
 def label_bar(ax, x_pos, bottom, height, txt, min_h=5):
     if height >= min_h:
         ax.text(x_pos, bottom + height / 2, txt,
-                ha='center', va='center', fontsize=9.5, color='white', fontweight='bold')
+                ha='center', va='center', fontsize=9.5, color='black', fontweight='bold')
 
 def overall_badge(ax, text, bg, border):
     ax.text(1, 112, text, ha='center', fontsize=9, color=border, fontweight='bold',

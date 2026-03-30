@@ -122,6 +122,7 @@ for k in K_range:
 # ── FIGURE ──
 fig = plt.figure(figsize=(18, 11))
 gs  = fig.add_gridspec(2, 3, hspace=0.32, wspace=0.38)
+fig.subplots_adjust(bottom=0.12)
 
 def cluster_label(c):
     nm = cluster_names[c]; n = cluster_sizes[c]
@@ -205,7 +206,8 @@ ax_d.text(0.98, 0.98, 'KW p < 0.001', transform=ax_d.transAxes, ha='right', va='
           fontsize=9.5, fontweight='bold', color=COLORS['blue'])
 ax_d.set_ylabel('Mean ± SD', fontweight='bold')
 ax_d.set_title('D. AMR Risk Index by Cluster', fontweight='bold', pad=8)
-ax_d.set_xticks(range(3)); ax_d.set_xticklabels(clabels, fontsize=8.5)
+ax_d.set_xticks(range(3)); ax_d.set_xticklabels(clabels, fontsize=7.5)
+ax_d.tick_params(axis='x', labelrotation=8, pad=0)
 ax_d.set_ylim(0, max(r_means) * 1.38); ax_d.grid(axis='y', alpha=0.3)
 
 # ── E. Practice Score by cluster ──
@@ -226,7 +228,8 @@ ax_e.text(0.98, 0.98, 'KW p < 0.001', transform=ax_e.transAxes, ha='right', va='
           fontsize=9.5, fontweight='bold', color=COLORS['blue'])
 ax_e.set_ylabel('Mean ± SD', fontweight='bold')
 ax_e.set_title('E. Practice Score (0–30) by Cluster', fontweight='bold', pad=8)
-ax_e.set_xticks(range(3)); ax_e.set_xticklabels(clabels, fontsize=8.5)
+ax_e.set_xticks(range(3)); ax_e.set_xticklabels(clabels, fontsize=7.5)
+ax_e.tick_params(axis='x', labelrotation= 8, pad=0)
 ax_e.set_ylim(0, max(p_means) * 1.38); ax_e.grid(axis='y', alpha=0.3)
 
 # ── F. Silhouette plot ──
@@ -249,9 +252,9 @@ ax_f.set_xlabel('Silhouette coefficient', fontweight='bold')
 ax_f.set_ylabel('Farm index', fontweight='bold')
 ax_f.set_title(f'F. Silhouette Plot (k = 3, mean = {avg_score:.3f})', fontweight='bold', pad=8)
 ax_f.set_yticks([]); ax_f.grid(axis='x', alpha=0.3)
-ax_f.legend(loc='best', fontsize=8.5)
+ax_f.legend(loc='upper left', fontsize=6.5)
 ax_f.text(0.98, 0.02,
-          '⚠ Mean silhouette = 0.220\n(weak-to-moderate separation)\n— acknowledged limitation',
+          'Mean silhouette = 0.220\n(weak-to-moderate separation)\n— acknowledged limitation',
           transform=ax_f.transAxes, ha='right', va='bottom', fontsize=7.5, color='#9C0006',
           bbox=dict(boxstyle='round,pad=0.3', facecolor='#FFEBEE', edgecolor=COLORS['c_high'], alpha=0.9))
 

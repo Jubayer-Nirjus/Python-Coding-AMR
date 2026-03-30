@@ -95,8 +95,8 @@ overall_mean   = df['AMR_Risk_Index'].dropna().mean()
 
 # ── FIGURE ──
 fig = plt.figure(figsize=(16, 12))
-gs  = GridSpec(2, 2, height_ratios=[1, 0.72], width_ratios=[1, 1],
-               hspace=0.28, wspace=0.30)
+gs  = GridSpec(2, 2, height_ratios=[1, 0.82], width_ratios=[1, 1],
+               hspace=0.38, wspace=0.30)
 
 # ── Panel A: AMR Risk by Location ──
 ax_a = fig.add_subplot(gs[0, 0])
@@ -166,7 +166,7 @@ bars = ax_c.bar(district_stats['District'], district_stats['mean'],
 for bar, (_, row) in zip(bars, district_stats.iterrows()):
     sd_val = row['std'] if not np.isnan(row['std']) else 0
     ax_c.text(bar.get_x() + bar.get_width() / 2,
-              bar.get_height() + sd_val + 0.12,
+              bar.get_height() + sd_val + 0.08,
               f'{row["mean"]:.1f}\n(n = {int(row["count"])})',
               ha='center', va='bottom', fontsize=8, fontweight='bold', color='#333333')
 
@@ -180,9 +180,9 @@ ax_c.axhspan(5, 8, alpha=0.04, color=COLORS['high'])
 ax_c.set_xlabel('District', fontweight='bold')
 ax_c.set_ylabel('Mean AMR Risk Index (±SD)', fontweight='bold')
 ax_c.set_title('C. Mean AMR Risk Index by District  (districts with n ≥ 5 shown)',
-               fontweight='bold', pad=8)
-ax_c.legend(loc='upper right', frameon=True, fontsize=9)
-ax_c.set_ylim(0, 5.5)
+               fontweight='bold', pad=14)
+ax_c.legend(loc='upper right', bbox_to_anchor=(1.0, 1.02), frameon=True, fontsize=9)
+ax_c.set_ylim(0, 6.4)
 ax_c.grid(axis='y', linestyle='--', alpha=0.4)
 plt.setp(ax_c.get_xticklabels(), rotation=35, ha='right')
 

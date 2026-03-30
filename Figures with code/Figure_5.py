@@ -177,7 +177,7 @@ ax3.set_ylabel('AM-using farms (%)', fontsize=10)
 ax3.set_ylim(0, 82); ax3.set_yticks(range(0, 81, 20))
 ax3.tick_params(axis='y', labelsize=9.5)
 ax3.axhline(y=0, color=COLORS['gray_dark'], lw=0.8)
-ax3.legend(loc='upper center', fontsize=8.5, framealpha=0.95, edgecolor=COLORS['gray_light'])
+ax3.legend(loc='upper left', fontsize=7.5, framealpha=0.95, edgecolor=COLORS['gray_light'])
 ax3.set_title('C. WHO AWaRe Category\nby Farm Type',
               fontsize=11, fontweight='bold', color=COLORS['gray_dark'], pad=8)
 p_badge(ax3, 'χ² ns (p = 0.383)')
@@ -201,7 +201,7 @@ ax4.set_title('D. Knowledge Score\nvs Growth Promoter Use',
 p_badge(ax4, f'MW p {p_gp_str}')
 for xpos, data, col in [(1, gp_users, COLORS['vermillion']), (2, gp_non, COLORS['green'])]:
     ax4.text(xpos, data.mean() + 0.12, f'μ = {data.mean():.1f}',
-             ha='center', fontsize=9, color=col, fontweight='bold')
+             ha='center', fontsize=9, color='black', fontweight='bold')
 
 # ── PANEL E ──
 rng = np.random.default_rng(42)
@@ -247,10 +247,10 @@ ax6.set_ylabel('AM-using farms (%)', fontsize=10)
 ax6.set_ylim(0, 88); ax6.set_yticks(range(0, 81, 20))
 ax6.tick_params(axis='y', labelsize=9.5)
 ax6.axhline(y=0, color=COLORS['gray_dark'], lw=0.8)
-ax6.legend(loc='upper left', fontsize=7.5, framealpha=0.95,
+ax6.legend(loc='upper left', fontsize=7, framealpha=0.95,
            edgecolor=COLORS['gray_light'], title='Therapy type', title_fontsize=7.5)
 ax6.set_title('F. Therapy Type by Farm Type',
-              fontsize=11, fontweight='bold', color=COLORS['gray_dark'], pad=8)
+              fontsize=11, fontweight='bold', color=COLORS['gray_dark'], pad=18)
 
 fig.text(
     0.01, -0.02,
