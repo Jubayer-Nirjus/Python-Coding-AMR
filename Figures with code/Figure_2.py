@@ -1,12 +1,21 @@
 """
-Figure 2 — WHO AWaRe Category Distribution
-Updated for CP_AMR_Master_File_V13.xlsx
-Output: Figure2_AWaRe_Distribution.png
+Figure 2 — WHO AWaRe Antibiotic Category Distribution
+Preventive Veterinary Medicine (Elsevier) — journal-compliant output
 
-Coding reference (V13):
-  AM_use_binary:  0=AM users (n=165), 1=non-users (n=47)
-  AWaRE_Category: 0=Access, 1=Watch, 2=Reserve, 99=non-users (structural N/A)
-  Farm_Type:      0=Broiler, 1=Layer, 2=Sonali
+Journal requirements applied:
+  - No figure title on the figure itself (caption only)
+  - PNG, 300 dpi, 13×6 inches = 3900×1800 px ✓
+  - Wong (2011) colorblind-safe palette
+  - Output: Figure_2.png
+
+CAPTION (use in manuscript):
+  Fig. 2. WHO AWaRe antibiotic category distribution among antimicrobial-using poultry
+  farms, stratified by farm type. Bars represent the percentage of antimicrobial-using
+  farms (n = 165) classified into Access, Watch, or Reserve categories per WHO AWaRe
+  2023. Reserve category includes colistin following reclassification (five farms).
+  Non-antimicrobial-using farms (n = 47) are excluded. Panel definitions: Access —
+  broad-spectrum first-line antibiotics; Watch — higher resistance potential, restricted
+  indications; Reserve — last-resort antibiotics critical for human medicine.
 """
 
 import pandas as pd
@@ -19,18 +28,24 @@ import warnings
 warnings.filterwarnings('ignore')
 
 EXCEL_FILE = 'CP_AMR_Master_File_V13.xlsx'
-OUTPUT     = 'Figure2_AWaRe_Distribution.png'
+OUTPUT     = 'Figure_2.png'
 
+# Wong (2011) colorblind-safe palette
 COLORS = {
-    'dark_blue'  : '#1F4E79',
-    'mid_blue'   : '#2E75B6',
-    'light_blue' : '#BDD7EE',
-    'access'     : '#375623',
-    'watch'      : '#BF6000',
-    'reserve'    : '#C00000',
+    'blue'       : '#0072B2',
+    'sky_blue'   : '#56B4E9',
+    'orange'     : '#E69F00',
+    'vermillion' : '#D55E00',
+    'green'      : '#009E73',
+    'pink'       : '#CC79A7',
+    'black'      : '#000000',
     'gray_dark'  : '#404040',
     'gray_mid'   : '#767676',
     'gray_light' : '#D9D9D9',
+    # AWaRe specific (colorblind-safe)
+    'access'     : '#009E73',   # green — safe/accessible
+    'watch'      : '#E69F00',   # orange — caution
+    'reserve'    : '#D55E00',   # vermillion — restrict
 }
 
 plt.rcParams.update({
@@ -41,7 +56,7 @@ plt.rcParams.update({
     'axes.linewidth'    : 0.8,
     'savefig.dpi'       : 300,
     'savefig.bbox'      : 'tight',
-    'savefig.pad_inches': 0.25,
+    'savefig.pad_inches': 0.15,
 })
 
 # ── LOAD ──
@@ -50,14 +65,12 @@ df = df.dropna(subset=['Unique_ID'])
 for col in df.columns:
     df[col] = pd.to_numeric(df[col], errors='coerce')
 
-# AM users only (AM_use_binary==0), exclude 99 from AWaRe
 AM   = df[df['AM_use_binary'] == 0].copy()
-b_am = AM[AM['Farm_Type'] == 0]   # Broiler AM users
-l_am = AM[AM['Farm_Type'] == 1]   # Layer AM users
-s_am = AM[AM['Farm_Type'] == 2]   # Sonali AM users
+b_am = AM[AM['Farm_Type'] == 0]
+l_am = AM[AM['Farm_Type'] == 1]
+s_am = AM[AM['Farm_Type'] == 2]
 
 def pct(data, col, code):
-    """% of AM users with given AWaRe code (excludes 99)."""
     d = data[col].dropna()
     d = d[d != 99]
     return round((d == code).sum() / len(d) * 100, 1) if len(d) > 0 else 0.0
@@ -82,16 +95,16 @@ ax_bar = axes[0]
 ax_ann = axes[1]
 
 x  = np.arange(len(labels))
-bw = 0.50
+bw = 0.52
 
-b1 = ax_bar.bar(x, access_vals,  bw, color=COLORS['access'],
-                label='Access',  edgecolor='white', linewidth=0.7)
-b2 = ax_bar.bar(x, watch_vals,   bw, color=COLORS['watch'],
-                label='Watch',   edgecolor='white', linewidth=0.7,
-                bottom=access_vals)
-b3 = ax_bar.bar(x, reserve_vals, bw, color=COLORS['reserve'],
-                label='Reserve', edgecolor='white', linewidth=0.7,
-                bottom=[a + w for a, w in zip(access_vals, watch_vals)])
+ax_bar.bar(x, access_vals,  bw, color=COLORS['access'],
+           label='Access',  edgecolor='white', linewidth=0.7)
+ax_bar.bar(x, watch_vals,   bw, color=COLORS['watch'],
+           label='Watch',   edgecolor='white', linewidth=0.7,
+           bottom=access_vals)
+ax_bar.bar(x, reserve_vals, bw, color=COLORS['reserve'],
+           label='Reserve', edgecolor='white', linewidth=0.7,
+           bottom=[a + w for a, w in zip(access_vals, watch_vals)])
 
 for i, (a, w, r) in enumerate(zip(access_vals, watch_vals, reserve_vals)):
     if a >= 7:
@@ -105,21 +118,15 @@ for i, (a, w, r) in enumerate(zip(access_vals, watch_vals, reserve_vals)):
 
 ax_bar.set_xticks(x)
 ax_bar.set_xticklabels(labels, fontsize=11)
-ax_bar.set_ylabel('% of AM-Using Farms', fontsize=10.5)
-ax_bar.set_ylim(0, 120)
+ax_bar.set_ylabel('AM-using farms (%)', fontsize=10.5)
+ax_bar.set_ylim(0, 115)
 ax_bar.set_yticks(range(0, 101, 20))
 ax_bar.tick_params(axis='y', labelsize=9.5)
 ax_bar.axhline(y=0, color=COLORS['gray_dark'], linewidth=0.8)
 ax_bar.legend(
-    loc='upper center', fontsize=7.5, framealpha=0.95,
+    loc='upper center', fontsize=8.5, framealpha=0.95,
     edgecolor=COLORS['gray_light'],
-    title='WHO AWaRe Category', title_fontsize=8.5,
-)
-ax_bar.set_title(
-    'Figure 2 — WHO AWaRe Antibiotic Category Distribution by Farm Type\n'
-    f'(AM-using farms only, n={len(AM)})',
-    loc='left', fontsize=12, fontweight='bold',
-    color=COLORS['dark_blue'], pad=12,
+    title='WHO AWaRe category', title_fontsize=8.5,
 )
 
 # ── RIGHT PANEL — definitions ──
@@ -128,15 +135,15 @@ ax_ann.set_ylim(0, 1)
 ax_ann.axis('off')
 
 AWARE_DEFS = [
-    ('Access',   COLORS['access'],  '#E8F5E9',
+    ('Access',   COLORS['access'],  '#E8F5EE',
      'Broad-spectrum first-line\nantibiotics. Appropriate\nfor common infections.'),
     ('Watch',    COLORS['watch'],   '#FFF8E1',
-     'Higher resistance potential.\nShould be used only for\nspecific indications.'),
-    ('Reserve',  COLORS['reserve'], '#FFEBEE',
+     'Higher resistance potential.\nFor specific indications\nonly.'),
+    ('Reserve',  COLORS['reserve'], '#FFECE8',
      'Last-resort antibiotics.\nCritical for human medicine.\nUse strictly limited.'),
 ]
 
-BOX_H   = 0.30
+BOX_H   = 0.29
 GAP     = 0.04
 y_start = 0.97
 
@@ -145,30 +152,25 @@ for cat, border_c, fill_c, desc in AWARE_DEFS:
     ax_ann.add_patch(mpatches.FancyBboxPatch(
         (0.04, y_box), 0.92, BOX_H,
         boxstyle='round,pad=0.025',
-        facecolor=fill_c, edgecolor=border_c,
-        linewidth=2.0, clip_on=False,
+        facecolor=fill_c, edgecolor=border_c, linewidth=2.0, clip_on=False,
     ))
     ax_ann.text(0.50, y_start - 0.055, cat,
-                ha='center', va='top',
-                fontsize=10, fontweight='bold', color=border_c)
+                ha='center', va='top', fontsize=10, fontweight='bold', color=border_c)
     ax_ann.text(0.50, y_start - 0.125, desc,
-                ha='center', va='top',
-                fontsize=8.5, color=COLORS['gray_dark'], linespacing=1.55)
+                ha='center', va='top', fontsize=8.5, color=COLORS['gray_dark'], linespacing=1.5)
     y_start -= (BOX_H + GAP)
 
-ax_ann.text(0.50, 0.01, 'WHO AWaRe Classification 2023\n(Colistin = Reserve per V13 correction)',
+ax_ann.text(0.50, 0.01, 'WHO AWaRe 2023\n(Colistin = Reserve)',
             ha='center', fontsize=7.5, color=COLORS['gray_mid'], style='italic')
 
 fig.text(
-    0.01, -0.03,
-    f'Note: Denominator = AM-using farms only (n={len(AM)}). '
-    'Farms using multiple antibiotic categories classified to highest-risk category (worst-case). '
-    f'Non-users (n={len(df[df["AM_use_binary"]==1])}) excluded. '
-    'Reserve category includes colistin (WHO AWaRe 2023 reclassification). '
-    'Source: CP_AMR_Master_File_V13.xlsx',
+    0.01, -0.02,
+    f'AM = antimicrobial. n (AM-using) = {len(AM)}; non-users (n = {len(df[df["AM_use_binary"]==1])}) excluded. '
+    'Farms using multiple antibiotic categories assigned to the highest-risk category.',
     fontsize=8, color=COLORS['gray_mid'],
 )
 
-plt.savefig(OUTPUT, dpi=300)
+plt.tight_layout()
+plt.savefig(OUTPUT, dpi=300, format='png')
 plt.close()
 print(f'✓ Saved: {OUTPUT}')
